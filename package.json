@@ -42,7 +42,7 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server --open --https --cert ./cert/server.crt --key ./cert/server.nopass.key"
   },
   "eslintConfig": {
     "extends": [
