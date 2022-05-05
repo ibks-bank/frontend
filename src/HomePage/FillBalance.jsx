@@ -52,6 +52,8 @@ class FillBalance extends React.Component {
                 }
 
                 if(counter.hasOwnProperty('balance')){
+                    counter.balance = (Number(counter.balance)/100).toFixed(2)
+
                     this.addNewEmp(counter);
                     //console.log(JSON.stringify(counter))
                     if (i === 0)
@@ -63,6 +65,8 @@ class FillBalance extends React.Component {
                 else
                 {
                     let temp = JSON.parse(JSON.stringify(counter).slice(0, -1) +',"balance":"0"}');
+                    temp.balance = (Number(temp.balance)/100).toFixed(2)
+
                     //console.log(temp)
                     if (i === 0)
                     {
@@ -136,7 +140,7 @@ class FillBalance extends React.Component {
         let empRecord = this.state.billsList.map((x)=>{
             return(
                 <option>
-                    {x.id+":"+x.balance + " " +x.currency}
+                    {x.id+":\t\t"+x.balance + " " +x.currency}
                 </option>
             )
         })
@@ -169,7 +173,7 @@ class FillBalance extends React.Component {
                     <br style={{fontSize:'24'}}></br>
                     <div>
                         <label style={{fontSize:'16px'}} htmlFor="limit">amount</label>
-                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%'}} type="text" className="form-control" name="amount" onChange={this.handleChange} />
+                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%', backgroundColor:'greenyellow'}} type="text" className="form-control" name="amount" onChange={this.handleChange} />
                     </div>
                     <br style={{fontSize:'24'}}></br>
                     <br style={{fontSize:'24'}}></br>

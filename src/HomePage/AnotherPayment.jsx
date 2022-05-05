@@ -49,12 +49,16 @@ class AnotherPayment extends React.Component {
                     case 'CURRENCY_RUB':
                         counter.currency = '₽';
                         break
-
                 }
 
+
                 if(counter.hasOwnProperty('balance')){
-                    this.addNewEmp(counter);
                     //console.log(JSON.stringify(counter))
+                    console.log(counter.balance)
+                    counter.balance = (Number(counter.balance)/100).toFixed(2)
+                    console.log(counter.balance)
+                    this.addNewEmp(counter);
+
                     if (i === 0)
                     {
                         this.setState({inputValue:counter.id+":"+counter.balance + " " +counter.currency});
@@ -64,13 +68,17 @@ class AnotherPayment extends React.Component {
                 else
                 {
                     let temp = JSON.parse(JSON.stringify(counter).slice(0, -1) +',"balance":"0"}');
+                    temp.balance = (Number(temp.balance)/100).toFixed(2)
+
                     //console.log(temp)
                     if (i === 0)
                     {
                         this.setState({inputValue:temp.id+":"+temp.balance + " " +temp.currency});
                     }
+
                     this.addNewEmp(temp);
                 }
+
                 //console.log(counter.id);
             }
 
@@ -137,24 +145,7 @@ class AnotherPayment extends React.Component {
         this.props.create_transaction(id, payee, count)
         syncWait(500)
         this.back(e)
-//        if (!this.state.submitted)
-//        {
-//            this.setState({ submitted: true });
-//            this.setState({ disabled: false });
-//            const { username, password } = this.state;
-//            if (username && password) {
-//                this.props.login(username, password);
-//            }
-//        }
-//        else
-//        {
-//            this.setState({ submitted_code: true });
-//            const { username, password } = this.state;
-//            if (username && password && this.state.code) {
-//                this.props.confirm(username, password, this.state.code);
-//            }
-//
-//        }
+
     }
 
 
@@ -164,7 +155,7 @@ class AnotherPayment extends React.Component {
         let empRecord = this.state.billsList.map((x)=>{
             return(
                 <option>
-                    {x.id+":"+x.balance + " " +x.currency}
+                    {x.id+":\t\t"+(x.balance)+ " " +x.currency}
                 </option>
             )
         })
@@ -195,14 +186,14 @@ class AnotherPayment extends React.Component {
                     <br style={{fontSize:'24'}}></br>
                     <div>
                         <label style={{fontSize:'16px'}} htmlFor="middleName">To Account</label>
-                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%'}} type="text" className="form-control" name="payee" value={payee} onInput={this.handleChange} />
+                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%', backgroundColor:'greenyellow'}} type="text" className="form-control" name="payee" value={payee} onInput={this.handleChange} />
 
                     </div>
                     <br style={{fontSize:'24'}}></br>
                     <br style={{fontSize:'24'}}></br>
                     <div>
                         <label style={{fontSize:'16px'}} htmlFor="middleName">Sum Of Payment</label>
-                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%'}} type="text" className="form-control" name="count" value={count}  onInput={this.handleChange} />
+                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%', backgroundColor:'greenyellow'}} type="text" className="form-control" name="count" value={count}  onInput={this.handleChange} />
                     </div>
                     <br style={{fontSize:'24'}}></br>
                     <br style={{fontSize:'24'}}></br>

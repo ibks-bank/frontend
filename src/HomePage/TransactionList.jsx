@@ -5,7 +5,9 @@ import validator from 'validator'
 
 
 import { userActions } from '../_actions';
-import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
+import {AiFillCheckCircle, AiFillCloseCircle, AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
+import {List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
+import {ImCross} from "react-icons/all";
 
 class TransactionList extends React.Component {
 
@@ -38,10 +40,25 @@ class TransactionList extends React.Component {
             });
             for (var i = 0; i < obj.transactions.length; i++) {
                 let counter = obj.transactions[i];
-                //if(counter.hasOwnProperty('balance')){
-                    this.addNewEmp(counter);
-                        //this.setState({inputValue:counter.id+":"+counter.balance + " " +counter.currency});
-                  //console.log(JSON.stringify(counter))
+                if(counter.hasOwnProperty('error')) {
+                    //this.setState({inputValue:counter.id+":"+counter.balance + " " +counter.currency});
+                    //console.log(JSON.stringify(counter))
+                }
+                else counter.error = "";
+
+                switch (counter.type) {
+                    case "TYPE_TRANSFER":
+                        counter.type = "Transfer";
+                        break;
+                    case "TYPE_PAYMENT":
+                        counter.type = "Payment";
+                        break;
+                    default:
+                        counter.type = "UNKNOWN";
+                        break;
+
+                }
+                this.addNewEmp(counter);
 
                 //console.log(counter.id);
             }
@@ -112,9 +129,20 @@ class TransactionList extends React.Component {
         render() {
             let empRecord = this.state.billsList.map((x)=>{
                 return(
-                    <li>
-                        {x.id+":"+x.accountFrom+":"+x.accountTo+":"+x.amount+":"+x.type+":"+x.time+":"+x.error}
-                    </li>
+                    <ListItem style={{borderBottom: "3px solid rgb(0, 0, 0)"}}>
+                        <ListItemIcon style={{width: '50px'}}>
+                            {x.error ? <AiFillCloseCircle style={{width: '50px'}} color="red"/> : <AiFillCheckCircle style={{width: '50px'}} color="green"/> }
+                        </ListItemIcon>
+                        <ListItemText disableTypography style={{fontSize: '18px'}}
+                                      primary={
+                            x.error ?
+                                ("FAILED " + x.type + " " + x.amount + ": from "+x.accountFrom+" to "+x.accountTo+" : "+((x.time).split('T'))[0]+"Reason: "+x.error)
+                                : (x.type + " " + x.amount + ": from "+x.accountFrom+" to "+x.accountTo+" : "+((x.time).split('T'))[0])
+
+                                      }/>
+
+
+                    </ListItem>
                 )
             })
 
@@ -136,12 +164,9 @@ class TransactionList extends React.Component {
                     <br style={{fontSize:'24'}}></br>
                     <br style={{fontSize:'24'}}></br>
                     <div>
-                        <label style={{fontSize:'16px'}} htmlFor="middleName">Transaction List</label>
-
-                        <ul style={{fontSize: '32px', height: '80px'}} name="payee"
-                             >
+                        <List style={{height: "500px",overflow: 'auto'}} name="payee" >
                             {empRecord}
-                        </ul>
+                        </List>
                     </div>
                     <br style={{fontSize:'24'}}></br>
                     <br style={{fontSize:'24'}}></br>

@@ -255,9 +255,9 @@ function getAll() {
     return dispatch => {
         dispatch(request());
 
-        userService.getAll()
+       return userService.getAll()
             .then(
-                users => dispatch(success(users)),
+                users => {dispatch(success(users)); return users},
                 error => dispatch(failure(error.toString()))
             );
     };

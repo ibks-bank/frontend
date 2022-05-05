@@ -51,6 +51,8 @@ class OwnPayment extends React.Component {
                 }
 
                 if(counter.hasOwnProperty('balance')){
+                    counter.balance = (Number(counter.balance)/100).toFixed(2)
+
                     this.addNewEmp(counter);
                     if (i === 0)
                     {
@@ -66,6 +68,8 @@ class OwnPayment extends React.Component {
                 else
                 {
                     let temp = JSON.parse(JSON.stringify(counter).slice(0, -1) +',"balance":"0"}');
+                    temp.balance = (Number(temp.balance)/100).toFixed(2)
+
                     //console.log(temp)
                     if (i=== 0)
                     {
@@ -95,6 +99,13 @@ class OwnPayment extends React.Component {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     }
+
+
+    selectElement(id, valueToSelect) {
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+
 
     continue = e => {
         this.setState({submitted:true});
@@ -128,13 +139,23 @@ class OwnPayment extends React.Component {
 
     onChange = (event) =>
     {
+        if (this.state.inputValue === this.state.inputValue_to)
+        {
+            this.selectElement("toList", this.state.inputValue)
+            this.setState({inputValue:event.target.value});
+            this.setState({inputValue_to:this.state.inputValue});
+
+        }
+        else
         this.setState({inputValue:event.target.value});
-        //console.log(event.target.value)
+        console.log("kkk"+event.target.value)
     }
 
     onChange1 = (event) =>
     {
         this.setState({inputValue_to:event.target.value});
+        console.log("lll"+event.target.value)
+
         //console.log(event.target.value)
     }
 
@@ -162,8 +183,8 @@ class OwnPayment extends React.Component {
             let empRecord = this.state.billsList.map((x)=>{
                 //console.log(inputValue_to.split(':', 1) + x.id + (x.id !== inputValue_to.split(':', 1)))
                     return(
-                        <option>
-                            {x.id+":"+x.balance + " " +x.currency}
+                        <option value={x.id}>
+                            {x.id+":\t\t"+x.balance + " " +x.currency}
                         </option>
                     )
             })
@@ -172,8 +193,8 @@ class OwnPayment extends React.Component {
                 //console.log(inputValue)
                 if (x.id.toString() !== inputValue.split(':', 1).toString())
                 return(
-                    <option>
-                        {x.id+":"+x.balance + " " +x.currency}
+                    <option value={x.id}>
+                        {x.id+":\t\t"+x.balance + " " +x.currency}
                     </option>
                 )
             })
@@ -195,7 +216,7 @@ class OwnPayment extends React.Component {
                     <div>
                         <label style={{fontSize:'16px'}} htmlFor="middleName">From Account</label>
 
-                        <select style={{fontSize: '32px', height: '80px', backgroundColor:'greenyellow'}} name="accounts"
+                        <select style={{fontSize: '32px', height: '80px', backgroundColor:'greenyellow'}} id={"fromList"} name="accounts"
                             className="form-control form-control-lg" onChange={this.onChange}>
                             {empRecord}
 
@@ -206,8 +227,8 @@ class OwnPayment extends React.Component {
                     <div>
                         <label style={{fontSize:'16px'}} htmlFor="middleName">To Account</label>
 
-                        <select style={{fontSize: '32px', height: '80px', backgroundColor:'greenyellow'}} name="payee"
-                            className="form-control form-control-lg" onChange={this.onChange}>
+                        <select style={{fontSize: '32px', height: '80px', backgroundColor:'greenyellow'}} id={"toList"} name="payee"
+                            className="form-control form-control-lg" onChange={this.onChange1}>
                             {empRecord1}
                     </select>
                     </div>
@@ -215,7 +236,7 @@ class OwnPayment extends React.Component {
                     <br style={{fontSize:'24'}}></br>
                     <div>
                         <label style={{fontSize:'16px'}} htmlFor="middleName">Sum Of Payment</label>
-                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%'}} type="text" className="form-control" name="count" value={count} onInput={this.handleChange} />
+                        <input style={{fontSize:'32px',height:'80px', padding:'13px 10px', width:'100%', backgroundColor:'greenyellow'}} type="text" className="form-control" name="count" value={count} onInput={this.handleChange} />
                     </div>
                     <br style={{fontSize:'24'}}></br>
                     <br style={{fontSize:'24'}}></br>
