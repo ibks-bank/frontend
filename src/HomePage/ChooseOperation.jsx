@@ -50,6 +50,8 @@ class ChooseOperation extends React.Component {
                 }
 
                 if(counter.hasOwnProperty('balance')){
+                    counter.balance = (Number(counter.balance)/100).toFixed(2)
+
                     this.addNewEmp(counter);
                     if (i=== 0)
                     {
@@ -64,6 +66,8 @@ class ChooseOperation extends React.Component {
 
 
                     let temp = JSON.parse(JSON.stringify(counter).slice(0, -1) +',"balance":"0"}');
+                    temp.balance = (Number(temp.balance)/100).toFixed(2)
+
                     //console.log(temp)
                     if (i=== 0)
                     {
@@ -78,8 +82,34 @@ class ChooseOperation extends React.Component {
 
         });
 
+        this.props.getAll().then(result => {
+            console.log(result)
+            const obj_ = (result)
+            this.setState({name: obj_.firstName});
+            const date = new Date();
+            const current_hour = date.getHours();
+            switch (true) {
+                case (current_hour < 6):
+                    this.setState({time_: "night"});
+                    break;
+                case (current_hour < 12):
+                    this.setState({time_: "morning"});
+                    break;
+                case (current_hour < 17):
+                    this.setState({time_: "day"});
+                    break;
+                default:
+                    this.setState({time_: "evening"});
+                    break;
+            }
 
-        //const { getallbill } = this.props;
+
+
+        })
+
+
+
+            //const { getallbill } = this.props;
         //let str = JSON.stringify(getallbill.items);
         //console.log('123'+str)
         //this.setState({inputValue:this.props.getAll_bill()});
@@ -108,6 +138,11 @@ class ChooseOperation extends React.Component {
     {
         this.props.logout();
         //console.log(event.target.value)
+    }
+
+    openTg = e =>{
+        const url = 'https://web.telegram.org/z/#-1207748445';
+        window.open(url, '_blank').focus();
     }
 
     onChange = (event) =>
@@ -167,9 +202,11 @@ class ChooseOperation extends React.Component {
         //const { submitted } = this.state;
 
         return (
-            <div style={{flex: '1', height:'100%'}}>
+            <div style={{flex: '1', height:'100%'}} className="text-center">
                 <br/>
+                <label style={{fontSize:'24px'}} className="text-center" >{"Good " + this.state.time_ + ", " + this.state.name + "!"}</label>
 
+                <br/>
                 <div  style={{flex: '1', height:'100%'}}>
                     <select style={{fontSize:'32px', height:'80px', backgroundColor:'greenyellow'}} name="accounts" className="form-control form-control-lg" onChange={this.onChange} >
                         {empRecord}
@@ -198,7 +235,7 @@ class ChooseOperation extends React.Component {
                         <br style={{fontSize:'24'}}></br>
                         <br style={{fontSize:'24'}}></br>
 
-                        <button style={{fontSize:'14px', width:'100%'}} name='tgTransfer' className="btn btn-primary" onClick={this.changeStep} >
+                        <button style={{fontSize:'14px', width:'100%'}} name='tgTransfer' className="btn btn-primary" onClick={this.openTg} >
                             <img style={{mixBlendMode:'multiply', pointerEvents:'none'}} src="../../src/resources/telegram_icon.png" alt="my image" width={"10%"}  />
                             <br/>
                             Telegram
@@ -251,6 +288,7 @@ function mapState(state) {
 const actionCreators = {
     getAll_bill: userActions.getAll_bill,
     logout: userActions.logout,
+    getAll: userActions.getAll
 
     //deleteUser: userActions.delete
 }

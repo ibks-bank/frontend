@@ -228,15 +228,20 @@ function logout() {
 }
 
 function getAll() {
+    let user = JSON.parse(localStorage.getItem('user'));
+
     const requestOptions = {
         method: 'GET',
-        headers: authHeader()
+        headers: { 'Content-Type': 'application/json', 'X-Auth-Token': user.token }
     };
+
+
 
     return fetch(`${config.apiUrl}/v1/passport`, requestOptions).then(handleResponse)
         .then(user => {
             return user;
-        });
+        })
+        ;
 }
 
 function getById(id) {
